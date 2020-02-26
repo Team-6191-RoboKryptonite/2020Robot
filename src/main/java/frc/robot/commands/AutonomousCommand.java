@@ -9,20 +9,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MotionMagic;
+import frc.robot.subsystems.ExampleSubsystem;
+
 
 public class AutonomousCommand extends CommandBase {
   /**
    * Creates a new AutonomousCommand.
    */
-  private final MotionMagic m_subsystem;
+  private final ExampleSubsystem m_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AutonomousCommand(MotionMagic subsystem) {
+  public AutonomousCommand(ExampleSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     addRequirements(subsystem);

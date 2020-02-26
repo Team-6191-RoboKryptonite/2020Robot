@@ -13,14 +13,20 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Lift extends SubsystemBase {
-  private final WPI_TalonSRX lift = new WPI_TalonSRX(Constants.liftPort);
+public class Climb extends SubsystemBase {
+  private final WPI_TalonSRX lift = new WPI_TalonSRX(Constants.climb1Port);
+  private final WPI_TalonSRX lift2 = new WPI_TalonSRX(Constants.climb2Port);
   private final Solenoid liftBraker = new Solenoid(Constants.liftBrakerPort);
   /**
    * Creates a new Lift.
    */
-  public Lift() {
+  public Climb() {
 
+  }
+
+  public void liftMove(double winch,boolean braker, double mult){
+    liftBraker.set(braker);
+    lift.set(winch * mult);
   }
 
   @Override

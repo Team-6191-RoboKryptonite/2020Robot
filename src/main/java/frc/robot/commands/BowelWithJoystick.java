@@ -7,17 +7,21 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Bowel;
 
 public class BowelWithJoystick extends CommandBase {
   private final Bowel m_subsystem;
+  private final Joystick m_stick;
   /**
    * Creates a new BowelWithJoystick.
    */
-  public BowelWithJoystick(Bowel subsystem) {
+  public BowelWithJoystick(Bowel subsystem, Joystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
+    m_stick = joystick;
     addRequirements(subsystem);
 
   }
@@ -30,6 +34,8 @@ public class BowelWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_subsystem.BowelByJoystick(m_stick.getRawButton(Constants.button_X), m_stick.getRawButton(Constants.button_Y)
+                                , 0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.

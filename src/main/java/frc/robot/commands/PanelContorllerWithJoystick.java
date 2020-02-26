@@ -10,13 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ControlPanel;
 
-public class PanelContorller extends CommandBase {
+public class PanelContorllerWithJoystick extends CommandBase {
 
   private ControlPanel m_subsystem; 
   /**
    * Creates a new PanelContorller.
    */
-  public PanelContorller(ControlPanel subsystem) {
+  public PanelContorllerWithJoystick(ControlPanel subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     addRequirements(subsystem);

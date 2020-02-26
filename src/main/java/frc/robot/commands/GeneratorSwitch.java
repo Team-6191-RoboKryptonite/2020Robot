@@ -8,15 +8,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Climb;
 
 public class GeneratorSwitch extends CommandBase {
 
-  private final Lift m_subsystem;
+  private final Climb m_subsystem;
   /**
    * Creates a new GeneratorSwitch.
    */
-  public GeneratorSwitch(Lift subsystem) {
+  public GeneratorSwitch(Climb subsystem) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;

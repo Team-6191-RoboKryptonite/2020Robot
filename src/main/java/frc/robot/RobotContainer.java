@@ -16,6 +16,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -24,22 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final MotionMagic m_motionMagic = new MotionMagic();
-  private final Bowel m_bowel = new Bowel();
-  private final ControlPanel m_controlPanel = new ControlPanel();
-  private final Drive m_drive = new Drive();
-  private final Lift m_lift = new Lift();
-  private final Shooter m_shooter = new Shooter();
-  
 
-  private final AutonomousCommand m_autoCommand = new AutonomousCommand(m_motionMagic);
-  private final BowelWithJoystick m_bowelWithJoystick = new BowelWithJoystick(m_bowel);
-  private final DriveWithJoystick m_driveWithJoystick = new DriveWithJoystick(m_drive);
-  private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift);
-  private final PanelContorller m_panelContorller = new PanelContorller(m_controlPanel);
-  private final ShooterWithJoystick m_shooterWithJoystick = new ShooterWithJoystick(m_shooter);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -48,10 +34,30 @@ public class RobotContainer {
   private final Joystick m_stick_Control = new Joystick(Constants.joystick_Control);
 
 
+  // The robot's subsystems and commands are defined here...
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ExampleSubsystem m_subsystem = new ExampleSubsystem();
+  private final Bowel m_bowel = new Bowel();
+  private final ControlPanel m_controlPanel = new ControlPanel();
+  private final Chassis m_drive = new Chassis();
+  private final Climb m_lift = new Climb();
+  private final Shooter m_shooter = new Shooter();
+  
+
+  private final AutonomousCommand m_autoCommand = new AutonomousCommand(m_subsystem);
+  private final BowelWithJoystick m_bowelWithJoystick = new BowelWithJoystick(m_bowel, m_stick_Control);
+  private final DriveWithJoystick m_driveWithJoystick = new DriveWithJoystick(m_drive, m_stick_Drive);
+  private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift);
+  private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel);
+  private final ShooterWithJoystick m_shooterWithJoystick = new ShooterWithJoystick(m_shooter, m_stick_Control);
+
 
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_drive.setDefaultCommand(m_driveWithJoystick);
+    m_bowel.setDefaultCommand(m_bowelWithJoystick);
+    m_shooter.setDefaultCommand(m_shooterWithJoystick);
   }
 
   /**
@@ -61,6 +67,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
   }
 
 
