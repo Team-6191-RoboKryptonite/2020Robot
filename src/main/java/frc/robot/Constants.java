@@ -36,22 +36,23 @@ public final class Constants {
     public final static int climb1Port = 10;
     public final static int climb2Port = 5;
     public final static int handPort = 11;
-    public final static int chassisIntake = 8;
-    public final static int intake = 15;
-    public final static int intakeArm = 16;
+    public final static int chassisIntakePort = 8;
+    public final static int intakePort = 15;
+    public final static int intakeArmPort = 16;
 
     //Sensor Channel
     public final static I2C.Port i2cPort = I2C.Port.kOnboard;
     public final static int ultra_pingChannel = 1;
     public final static int ultra_echoChannel = 2;
-    public final static int limitSwitch_1Channel = 3;
-    public final static int limitSwitch_2Channel = 4;
-    public final static int limitSwitch_3Channel = 5;
+    //limitSwitchNumber From Low To High
+    public final static int limitSwitch_1Channel = 7;
+    public final static int limitSwitch_2Channel = 8;
+    public final static int limitSwitch_3Channel = 9;
     public final static int limitSwitch_4Channel = 6;
 
     //Pneumatics Port
-    public final static int liftBrakerPort = 1; 
-    public final static int switchOnHandPort = 2;
+    public final static int liftBrakerPort = 5; 
+    public final static int switchOnHandPort = 4;
 
     //Joystick Number
     public final static int joystick_Drive = 0;

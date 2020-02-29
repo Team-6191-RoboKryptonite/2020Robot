@@ -43,9 +43,9 @@ public class Shooter extends SubsystemBase {
 	/**
 	 * PID Gains may have to be adjusted based on the responsiveness of control loop.
      * kF: 1023 represents output value to Talon at 100%, 7200 represents Velocity units at 100% output
-     * 
+     * 0.025, 0.001, 20,
 	 * 	                                    			  kP   kI   kD   kF          Iz    PeakOut */
-  private final Gains kGains_Velocit = new Gains( 0.25, 0.001, 20, 1023.0/7200.0,  300,  1.00);
+  private final Gains kGains_Velocit = new Gains( 0.001, 0, 0, 1023.0/28800.0,  300,  1.00);
 
 
   /**
@@ -65,8 +65,8 @@ public class Shooter extends SubsystemBase {
 		 * Phase sensor accordingly. 
      * Positive Sensor Reading should match Green (blinking) Leds on Talon
     */
-    shooter_d.setSensorPhase(true);
-    shooter_t.setSensorPhase(false);
+    shooter_d.setSensorPhase(false);
+    shooter_t.setSensorPhase(true);
 
 		/* Config the peak and nominal outputs */
     shooter_d.configNominalOutputForward(0, kTimeoutMs);
@@ -113,12 +113,28 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void velocityClosedLoop(double speed){
-
-	  double targetVelocity_UnitsPer100ms = speed * 500.0 * 4096 / 600;
-		/* 500 RPM in either direction */
+  public void velocityClosedLoop(boolean button){
+    double targetVelocity_UnitsPer100ms = 1000.0 * 4096 / 600;
+    if(button){
+      /* 500 RPM in either direction */
 		shooter_d.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms);
+    }
+	  
+		
     
+  }
+  public void velocityClosedLoop_read(){
+    double motorOutput = shooter_d.getMotorOutputPercent();
+    double velocity = shooter_d.getSelectedSensorVelocity();
+    double targetVelocity_UnitsPer100ms = 500.0 * 4096 / 600;
+
+			/* Append more signals to print when in speed mode. */
+			SmartDashboard.putNumber("err:", shooter_d.getClosedLoopError(0));
+      SmartDashboard.putNumber("trg:", targetVelocity_UnitsPer100ms);
+      SmartDashboard.putNumber("RPM", velocity * 600 /4096);
+      SmartDashboard.putNumber("vel", velocity);
+      SmartDashboard.putNumber("output Percent", motorOutput);
+
   }
     /**
 	 * @param units CTRE mag encoder sensor units 

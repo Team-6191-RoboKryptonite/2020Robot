@@ -34,8 +34,10 @@ public class ShooterWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setPercentaheOutput(0.5, 0.7, m_stick.getRawButton(Constants.button_A));
-    m_subsystem.showEncoderPos();
+    m_subsystem.setPercentaheOutput(0.7, 0.5, m_stick.getRawAxis(Constants.trigger_l) > 0.3);
+    //m_subsystem.showEncoderPos();
+    //m_subsystem.velocityClosedLoop_read();
+    //m_subsystem.velocityClosedLoop(m_stick.getRawButton(Constants.button_B));
   }
 
   // Called once the command ends or is interrupted.

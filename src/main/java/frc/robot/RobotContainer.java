@@ -38,18 +38,20 @@ public class RobotContainer {
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleSubsystem m_subsystem = new ExampleSubsystem();
   private final Bowel m_bowel = new Bowel();
-  private final ControlPanel m_controlPanel = new ControlPanel();
+  //private final ControlPanel m_controlPanel = new ControlPanel();
   private final Chassis m_drive = new Chassis();
-  private final Climb m_lift = new Climb();
+  //private final Climb m_lift = new Climb();
   private final Shooter m_shooter = new Shooter();
+  //private final Baseket m_baseket = new Baseket();
   
 
   private final AutonomousCommand m_autoCommand = new AutonomousCommand(m_subsystem);
   private final BowelWithJoystick m_bowelWithJoystick = new BowelWithJoystick(m_bowel, m_stick_Control);
   private final DriveWithJoystick m_driveWithJoystick = new DriveWithJoystick(m_drive, m_stick_Drive);
-  private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift);
-  private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel);
+  //private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift, m_stick_Control);
+  //private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel, m_stick_Control);
   private final ShooterWithJoystick m_shooterWithJoystick = new ShooterWithJoystick(m_shooter, m_stick_Control);
+  //private final BaseketWithButton m_baseketWithButton = new BaseketWithButton(m_baseket, m_stick_Control);
 
 
   public RobotContainer() {
@@ -58,6 +60,9 @@ public class RobotContainer {
     m_drive.setDefaultCommand(m_driveWithJoystick);
     m_bowel.setDefaultCommand(m_bowelWithJoystick);
     m_shooter.setDefaultCommand(m_shooterWithJoystick);
+    //m_controlPanel.setDefaultCommand(m_panelContorllerWithJoystick);
+    //m_lift.setDefaultCommand(m_generatorSwitch);
+    //m_baseket.setDefaultCommand(m_baseketWithButton);
   }
 
   /**

@@ -34,8 +34,9 @@ public class BowelWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.BowelByJoystick(m_stick.getRawButton(Constants.button_X), m_stick.getRawButton(Constants.button_Y)
+    m_subsystem.BowelByJoystick(m_stick.getRawAxis(Constants.axis_l_y), m_stick.getRawAxis(Constants.axis_r_y)
                                 , 0.5, 0.5);
+    m_subsystem.moveChassisIntake(m_stick.getRawButton(Constants.button_B), 0.7);
   }
 
   // Called once the command ends or is interrupted.

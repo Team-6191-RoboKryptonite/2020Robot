@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -21,7 +22,7 @@ import frc.robot.Constants;
 
 public class ControlPanel extends SubsystemBase {
 
-  private final WPI_TalonSRX hand = new WPI_TalonSRX(Constants.handPort);
+  private final WPI_VictorSPX hand = new WPI_VictorSPX(Constants.handPort);
   private final Solenoid handOpen = new Solenoid(Constants.switchOnHandPort);
 
   //Declaration for ColorSensorV3
@@ -40,6 +41,7 @@ public class ControlPanel extends SubsystemBase {
   boolean colorChange;
   String colorString;
   ColorMatchResult match;
+  int handOutCount = 0;
   /**
    * Creates a new ControlPanel.
    */
@@ -59,52 +61,68 @@ public class ControlPanel extends SubsystemBase {
 
   }
 
-  public void LazySusanWithJoystick(double Speed){
-    if(Speed > 0.3 || Speed < -0.3){
-      hand.set(0.5);
+  public void LazySusanWithJoystick(double speed, boolean button){
+    if(button){
+      hand.set(speed);
+    }else{
+      hand.set(0);
     }
   }
 
-  public void MovePosition(boolean move1,boolean move2, double speed){
+  public void MovePosition(boolean redB, boolean yellowB, boolean greenB, boolean blueB, double speed){
 
     
-    double colorint = SmartDashboard.getNumber("Color(R1 Y2 G3 B4)", colorNow);
+    //double colorint = SmartDashboard.getNumber("Color(R1 Y2 G3 B4)", colorNow);
      
-    if(colorint == 1 && colorString == "Red"){
+    if(redB && colorString == "Red"){
       hand.set(0);
-    }else if(colorint == 2 && colorString == "Yellow" && match.confidence > 0.95){
+    }else if(yellowB && colorString == "Yellow" && match.confidence > 0.95){
       hand.set(0);
-    }else if(colorint == 3 && colorString == "Green" && match.confidence > 0.92){
+    }else if(greenB && colorString == "Green" && match.confidence > 0.92){
       hand.set(0);
-    }else if(colorint == 4 && colorString == "Blue" && match.confidence > 0.90){
+    }else if(blueB && colorString == "Blue" && match.confidence > 0.90){
       hand.set(0);
       }else{
       hand.set(speed);
     }
   }
 
-  public void MoveRotation(int speed){
-  if(rotation >= 8){
-      hand.stopMotor();
-  }else{
-    hand.set(speed);
+  public void MoveRotation(int speed, boolean button){
+    if(button){
+      if(rotation >= 8){
+        hand.stopMotor();
+      }else{
+        hand.set(speed);
+      }
+    colorChange = colorString == "Blue" && match.confidence > 0.90;
+  
+      if(colorChange && colorString!="Blue"){
+        rotation++;
+        colorChange = false;
+      }else{
+        hand.stopMotor();
+        rotation = 0;
+      }
+    SmartDashboard.putBoolean("Change", colorChange);
+    SmartDashboard.putNumber("Rotation", rotation);
+    }else{
+      hand.set(0);
+    }
   }
 
-  colorChange = colorString == "Blue" && match.confidence > 0.90;
-
-  if(colorChange && colorString!="Blue"){
-    rotation++;
-    colorChange = false;
-  }else{
-    hand.stopMotor();
-    rotation = 0;
+  public void HandOut(boolean button){
+    if(button){
+      handOutCount++;
+    }
+    if(handOutCount % 2 == 0){
+      handOpen.set(false);
+    }else{
+      handOpen.set(true);
+    }
+    SmartDashboard.putNumber("handOpen", handOutCount);
+    
   }
 
-  SmartDashboard.putBoolean("Change", colorChange);
-  SmartDashboard.putNumber("Rotation", rotation);
-
-
-  }
 
   @Override
   public void periodic() {

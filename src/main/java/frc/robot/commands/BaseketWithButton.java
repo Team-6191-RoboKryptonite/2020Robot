@@ -10,25 +10,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Chassis;
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.Baseket;
 
-public class DriveWithJoystick extends CommandBase {
-  /**
-   * Creates a new Chassis.
-   */
-  private final Chassis m_subsystem;
-  private final Joystick m_joystick;
-  /**
-   * @param subsystem The subsystem used by this command.
-   */
-  public DriveWithJoystick(Chassis subsystem, Joystick joystick) {
-    m_subsystem = subsystem;
-    m_joystick = joystick;
+public class BaseketWithButton extends CommandBase {
+  private final Baseket m_subsystem;
+  private final Joystick m_stick;
 
+  /**
+   * Creates a new BaseketWithButton.
+   */
+  public BaseketWithButton(Baseket subsystem, Joystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_subsystem = subsystem;
+    m_stick = joystick;
     addRequirements(subsystem);
   }
 
@@ -40,12 +34,10 @@ public class DriveWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveChassis(m_joystick.getRawAxis(Constants.trigger_r), 
-                             m_joystick.getRawAxis(Constants.trigger_l), 
-                             m_joystick.getRawAxis(Constants.axis_r_x),
-                             0.6);
-    m_subsystem.showEncoderPos();
-    //m_subsystem.showGyro();
+    m_subsystem.moveWithStick(m_stick.getRawAxis(Constants.axis_r_y) > 0.3 && m_stick.getRawButton(Constants.button_LB),
+                              m_stick.getRawAxis(Constants.axis_r_y) < -0.3 && m_stick.getRawButton(Constants.button_LB), 0.1);
+
+    m_subsystem.ArmPosWithLimitSwitch(m_stick.getRawAxis(Constants.axis_r_y), m_stick.getRawButton(Constants.button_LB), m_stick.getRawButtonPressed(Constants.button_A), 0.3);
   }
 
   // Called once the command ends or is interrupted.

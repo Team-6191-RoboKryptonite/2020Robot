@@ -18,6 +18,7 @@ public class Bowel extends SubsystemBase {
 
   private final WPI_TalonSRX bowel_t = new WPI_TalonSRX(Constants.bowel_tPort);
   private final WPI_TalonSRX bowel_d = new WPI_TalonSRX(Constants.bowel_dPort);
+  private final WPI_TalonSRX chassisIntake = new WPI_TalonSRX(Constants.chassisIntakePort);
   private final Ultrasonic ultra = new Ultrasonic(Constants.ultra_pingChannel, Constants.ultra_echoChannel);
   
   /**
@@ -25,20 +26,30 @@ public class Bowel extends SubsystemBase {
    */
   public Bowel() {
     bowel_d.setInverted(true);
+    bowel_t.setInverted(false);
+    chassisIntake.setInverted(false);
 
   }
 
-  public void BowelByJoystick(boolean down, boolean top, double topSpeed, double downSpeed){
-    if(down){
-      bowel_d.set(downSpeed);
-    }else if(top){
-      bowel_t.set(topSpeed);
+  public void BowelByJoystick(double down, double top, double topSpeed, double downSpeed){
+    if(down > 0.3 || down < -0.3){
+      bowel_d.set(downSpeed * down);
+    }else if(top > 0.3 || top < -0.3){
+      bowel_t.set(topSpeed * top);
     }else{
       bowel_t.set(0);
       bowel_d.set(0);
     }
   }
 
+  public void moveChassisIntake(boolean button, double speed){
+    if(button){
+      chassisIntake.set(speed);
+    }else{
+      chassisIntake.set(0);
+    }
+  }
+  
   public void ultrasonicControl(double distance, double speed){
     if(ultra.getRangeMM() > distance){
       bowel_t.set(speed);
