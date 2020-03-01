@@ -21,17 +21,18 @@ public class Baseket extends SubsystemBase {
   private final DigitalInput limitSwitch_1 = new DigitalInput(Constants.limitSwitch_1Channel);
   private final DigitalInput limitSwitch_2 = new DigitalInput(Constants.limitSwitch_2Channel);
   private final DigitalInput limitSwitch_3 = new DigitalInput(Constants.limitSwitch_3Channel);
+  int pos = 0;
   /**
    * Creates a new Baseket.
    */
   public Baseket(){
   }
 
-  public void moveWithStick(boolean up, boolean down, double speed){
+  public void ArmmoveWithStick(boolean up, boolean down, double speed, double downSpeed){
     if(up){
       intakeArm.set(speed);
       }else if(down){
-      intakeArm.set(speed * -1);
+      intakeArm.set(downSpeed * -1);
       }else{
       intakeArm.stopMotor();
     }
@@ -48,53 +49,51 @@ public class Baseket extends SubsystemBase {
       }
   }
 
-  public void ArmPosWithLimitSwitch(double axis, boolean move, boolean button,  double speed){
-    int pos = 0;
+  public void ArmPosWithLimitSwitch(double axis, boolean move, boolean button,  double speed, double downSpeed, boolean lowPos){
+    
 
 
     if(button){
       pos ++;
     }
-    SmartDashboard.putNumber("Position", pos % 3);
+    SmartDashboard.putNumber("IntakePosition", pos % 2);
     if(move){
 
-      if(axis > 0.3){
+      if(axis < -0.3){
 
-        if(limitSwitch_3.get()){
+        if(!limitSwitch_3.get()){
           intakeArm.stopMotor();
-        }else if(pos % 3 == 0){
-          intakeArmMove(limitSwitch_1.get(), speed * axis);
-        }else if(pos % 3 == 1){
-          intakeArmMove(limitSwitch_2.get(), speed * axis);
-        }else if(pos % 3 == 2){
-          intakeArmMove(limitSwitch_3.get(), speed * axis);
+        }else if(pos % 2 == 0){
+          intakeArmMove(limitSwitch_2.get(), speed);
+        }else if(pos % 2 == 1){
+          intakeArmMove(limitSwitch_3.get(), speed);
         }else{
-          intakeArm.set(speed * axis);
+          intakeArm.set(speed);
         }
   
-      }else if(axis < -0.3){
+      }else if(axis > 0.3){
   
-        if(limitSwitch_1.get()){
+        if(!limitSwitch_1.get()){
           intakeArm.stopMotor();
-        }else if(pos % 3 == 0){
-          intakeArmMove(limitSwitch_3.get(), speed * axis);
-        }else if(pos % 3 == 1){
-          intakeArmMove(limitSwitch_2.get(), speed * axis);
-        }else if(pos % 3 == 2){
-          intakeArmMove(limitSwitch_1.get(), speed * axis);
+        }else if(pos % 2 == 0){
+          intakeArmMove(limitSwitch_2.get(), downSpeed * -1);
+        }else if(pos % 2 == 1){
+          intakeArmMove(limitSwitch_3.get(), downSpeed * -1);
         }else{
-          intakeArm.set(speed * axis);
+          intakeArm.set(downSpeed * -1);
         }
   
       }else{
         intakeArm.stopMotor();
       }
 
+    }else if(lowPos){
+      intakeArmMove(limitSwitch_1.get(), -0.1);
     }else{
         intakeArm.stopMotor();
     }  
   }
-
+  //Function use in Arm Pos
   public void intakeArmMove(boolean move, double speed){
     if(move){
       intakeArm.set(speed);
@@ -102,6 +101,20 @@ public class Baseket extends SubsystemBase {
       intakeArm.stopMotor();
     }
   }
+
+
+  public void showLimSwi(){
+    SmartDashboard.putBoolean("limitSwitch1", limitSwitch_1.get());
+    SmartDashboard.putBoolean("limitSwitch2", limitSwitch_2.get());
+    SmartDashboard.putBoolean("limitSwitch3", limitSwitch_3.get());
+
+  }
+
+  public void LowPos(boolean button){
+    
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

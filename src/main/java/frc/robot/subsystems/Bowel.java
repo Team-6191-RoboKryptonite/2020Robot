@@ -25,26 +25,34 @@ public class Bowel extends SubsystemBase {
    * Creates a new Bowel.
    */
   public Bowel() {
-    bowel_d.setInverted(true);
-    bowel_t.setInverted(false);
-    chassisIntake.setInverted(false);
+    bowel_d.setInverted(false);
+    bowel_t.setInverted(true);
+    chassisIntake.setInverted(true);
 
   }
 
-  public void BowelByJoystick(double down, double top, double topSpeed, double downSpeed){
-    if(down > 0.3 || down < -0.3){
-      bowel_d.set(downSpeed * down);
-    }else if(top > 0.3 || top < -0.3){
-      bowel_t.set(topSpeed * top);
+  public void BowelByJoystick(double down, double top, double topSpeed, double downSpeed, boolean move){
+    if(move){
+      if(down > 0.3 || down < -0.3){
+        bowel_d.set(downSpeed * down);
+      }else if(top > 0.3 || top < -0.3){
+        bowel_t.set(topSpeed * top);
+      }else{
+        bowel_t.set(0);
+        bowel_d.set(0);
+      }
     }else{
       bowel_t.set(0);
       bowel_d.set(0);
     }
+    
   }
 
-  public void moveChassisIntake(boolean button, double speed){
-    if(button){
+  public void moveChassisIntake(boolean buttonIn, boolean buttonOut, double speed){
+    if(buttonIn){
       chassisIntake.set(speed);
+    }else if(buttonOut){
+      chassisIntake.set(-speed);
     }else{
       chassisIntake.set(0);
     }

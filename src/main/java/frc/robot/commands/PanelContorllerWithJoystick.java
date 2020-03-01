@@ -35,7 +35,7 @@ public class PanelContorllerWithJoystick extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.LazySusanWithJoystick(0.3, m_stick.getRawButton(Constants.button_LB));
-    m_subsystem.HandOut(m_stick.getRawButtonPressed(Constants. button_Y));
+    m_subsystem.HandOut(m_stick.getRawButton(Constants. button_Y));
   }
 
   // Called once the command ends or is interrupted.

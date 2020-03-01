@@ -106,11 +106,11 @@ public class Chassis extends SubsystemBase {
     wheel_r_1.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
     wheel_r_1.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
     /* Set acceleration and vcruise velocity - see documentation */
-    wheel_l_1.configMotionCruiseVelocity(15000, kTimeoutMs);
-    wheel_l_1.configMotionAcceleration(6000, kTimeoutMs);
+    wheel_l_1.configMotionCruiseVelocity(7500, kTimeoutMs);
+    wheel_l_1.configMotionAcceleration(3000, kTimeoutMs);
 
-    wheel_r_1.configMotionCruiseVelocity(15000, kTimeoutMs);
-    wheel_r_1.configMotionAcceleration(6000, kTimeoutMs);
+    wheel_r_1.configMotionCruiseVelocity(7500, kTimeoutMs);
+    wheel_r_1.configMotionAcceleration(3000, kTimeoutMs);
 
     /* Zero the sensor once on robot boot up */
     wheel_l_1.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
@@ -167,8 +167,6 @@ public class Chassis extends SubsystemBase {
     SmartDashboard.putBoolean(  "IMU_IsCalibrating",    ahrs.isCalibrating()); 
     SmartDashboard.putNumber(   "IMU_TotalYaw",         ahrs.getAngle());
     SmartDashboard.putNumber(   "IMU_YawRateDPS",       ahrs.getRate());
-
-   
      
   }
 

@@ -8,21 +8,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Baseket;
 
-public class ShooterWithJoystick extends CommandBase {
-
-  private final Shooter m_subsystem;
+public class BaseketWithJoystick extends CommandBase {
+  private final Baseket m_subsystem;
   private final Joystick m_stick;
+
   /**
-   * Creates a new ShooterWithJoystick.
+   * Creates a new BaseketWithButton.
    */
-  public ShooterWithJoystick(Shooter subsystem, Joystick stick){
+  public BaseketWithJoystick(Baseket subsystem, Joystick joystick) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    m_stick = stick;
+    m_stick = joystick;
     addRequirements(subsystem);
   }
 
@@ -34,10 +35,13 @@ public class ShooterWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.velocityClosedLoop(m_stick.getRawAxis(Constants.trigger_l) > 0.3, 1850, 2450);
-    //m_subsystem.showEncoderPos();
-    m_subsystem.velocityClosedLoop_read();
-    //m_subsystem.velocityClosedLoop(m_stick.getRawButton(Constants.button_B));
+    // m_subsystem.ArmmoveWithStick(m_stick.getRawAxis(Constants.axis_r_y) > 0.3 && m_stick.getRawButton(Constants.button_LB),
+    //                              m_stick.getRawAxis(Constants.axis_r_y) < -0.3 && m_stick.getRawButton(Constants.button_LB), 0.3);
+    m_subsystem.intakeWithButton(m_stick.getRawButton(Constants.button_LB) && m_stick.getRawAxis(Constants.axis_l_y) < -0.3
+                                 , m_stick.getRawButton(Constants.button_LB) && m_stick.getRawAxis(Constants.axis_l_y) > 0.3, 0.5);
+    m_subsystem.ArmPosWithLimitSwitch(m_stick.getRawAxis(Constants.axis_r_y), m_stick.getRawButton(Constants.button_LB)
+                                 , m_stick.getRawButtonPressed(Constants.button_A), 0.3, 0.1, m_stick.getRawButton(Constants.button_X) && !m_stick.getRawButton(Constants.button_LB));
+    m_subsystem.showLimSwi();
   }
 
   // Called once the command ends or is interrupted.

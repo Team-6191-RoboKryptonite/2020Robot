@@ -45,8 +45,8 @@ public final class Constants {
     public final static int ultra_pingChannel = 1;
     public final static int ultra_echoChannel = 2;
     //limitSwitchNumber From Low To High
-    public final static int limitSwitch_1Channel = 7;
-    public final static int limitSwitch_2Channel = 8;
+    public final static int limitSwitch_1Channel = 8;
+    public final static int limitSwitch_2Channel = 7;
     public final static int limitSwitch_3Channel = 9;
     public final static int limitSwitch_4Channel = 6;
 

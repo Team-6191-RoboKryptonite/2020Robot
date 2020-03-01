@@ -5,28 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
 
 public class AutonomousCommand extends CommandBase {
   /**
    * Creates a new AutonomousCommand.
    */
-  private final ExampleSubsystem m_subsystem;
+  private final Shooter m_subsystem_s;
+  private final Chassis m_subsystem_c;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AutonomousCommand(ExampleSubsystem subsystem) {
+  public AutonomousCommand(Shooter subsystem_s, Chassis subsystem_c) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_subsystem = subsystem;
-    addRequirements(subsystem);
+    m_subsystem_s = subsystem_s;
+    m_subsystem_c = subsystem_c;
+    addRequirements(subsystem_s, subsystem_c);
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +40,8 @@ public class AutonomousCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+
   }
 
   // Called once the command ends or is interrupted.

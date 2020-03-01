@@ -7,23 +7,18 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Baseket;
+import frc.robot.subsystems.Chassis;
 
-public class BaseketWithButton extends CommandBase {
-  private final Baseket m_subsystem;
-  private final Joystick m_stick;
-
+public class AutoMotion extends CommandBase {
   /**
-   * Creates a new BaseketWithButton.
+   * Creates a new AutoMotion.
    */
-  public BaseketWithButton(Baseket subsystem, Joystick joystick) {
+  private final Chassis m_subsystem;
+  public AutoMotion(Chassis subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    m_stick = joystick;
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -34,10 +29,7 @@ public class BaseketWithButton extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.moveWithStick(m_stick.getRawAxis(Constants.axis_r_y) > 0.3 && m_stick.getRawButton(Constants.button_LB),
-                              m_stick.getRawAxis(Constants.axis_r_y) < -0.3 && m_stick.getRawButton(Constants.button_LB), 0.1);
-
-    m_subsystem.ArmPosWithLimitSwitch(m_stick.getRawAxis(Constants.axis_r_y), m_stick.getRawButton(Constants.button_LB), m_stick.getRawButtonPressed(Constants.button_A), 0.3);
+    m_subsystem.MotionMagicFoward(5);
   }
 
   // Called once the command ends or is interrupted.

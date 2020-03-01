@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.Timer;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -32,27 +34,27 @@ public class RobotContainer {
    */
   private final Joystick m_stick_Drive = new Joystick(Constants.joystick_Drive);
   private final Joystick m_stick_Control = new Joystick(Constants.joystick_Control);
+  
 
 
   // The robot's subsystems and commands are defined here...
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ExampleSubsystem m_subsystem = new ExampleSubsystem();
   private final Bowel m_bowel = new Bowel();
-  //private final ControlPanel m_controlPanel = new ControlPanel();
+  private final ControlPanel m_controlPanel = new ControlPanel();
   private final Chassis m_drive = new Chassis();
   //private final Climb m_lift = new Climb();
   private final Shooter m_shooter = new Shooter();
   //private final Baseket m_baseket = new Baseket();
   
 
-  private final AutonomousCommand m_autoCommand = new AutonomousCommand(m_subsystem);
+  //private final AutonomousCommand m_autoCommand = new AutonomousCommand(m_shooter, m_drive);
   private final BowelWithJoystick m_bowelWithJoystick = new BowelWithJoystick(m_bowel, m_stick_Control);
   private final DriveWithJoystick m_driveWithJoystick = new DriveWithJoystick(m_drive, m_stick_Drive);
   //private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift, m_stick_Control);
-  //private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel, m_stick_Control);
+  private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel, m_stick_Control);
   private final ShooterWithJoystick m_shooterWithJoystick = new ShooterWithJoystick(m_shooter, m_stick_Control);
-  //private final BaseketWithButton m_baseketWithButton = new BaseketWithButton(m_baseket, m_stick_Control);
-
+  //private final BaseketWithJoystick m_baseketWithButton = new BaseketWithJoystick(m_baseket, m_stick_Control);
+  private final AutonomousGroup m_autonomousGroup = new AutonomousGroup(m_shooter, m_drive, m_bowel);
 
   public RobotContainer() {
     // Configure the button bindings
@@ -60,7 +62,7 @@ public class RobotContainer {
     m_drive.setDefaultCommand(m_driveWithJoystick);
     m_bowel.setDefaultCommand(m_bowelWithJoystick);
     m_shooter.setDefaultCommand(m_shooterWithJoystick);
-    //m_controlPanel.setDefaultCommand(m_panelContorllerWithJoystick);
+    m_controlPanel.setDefaultCommand(m_panelContorllerWithJoystick);
     //m_lift.setDefaultCommand(m_generatorSwitch);
     //m_baseket.setDefaultCommand(m_baseketWithButton);
   }
@@ -83,6 +85,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_autonomousGroup;
   }
 }

@@ -69,22 +69,26 @@ public class ControlPanel extends SubsystemBase {
     }
   }
 
-  public void MovePosition(boolean redB, boolean yellowB, boolean greenB, boolean blueB, double speed){
+  public void MovePosition(boolean redB, boolean yellowB, boolean greenB, boolean blueB, boolean button, double speed){
 
     
     //double colorint = SmartDashboard.getNumber("Color(R1 Y2 G3 B4)", colorNow);
-     
-    if(redB && colorString == "Red"){
+    if(button){
+      if(redB && colorString == "Red"){
+        hand.set(0);
+      }else if(yellowB && colorString == "Yellow" && match.confidence > 0.95){
+        hand.set(0);
+      }else if(greenB && colorString == "Green" && match.confidence > 0.92){
+        hand.set(0);
+      }else if(blueB && colorString == "Blue" && match.confidence > 0.90){
+        hand.set(0);
+        }else{
+        hand.set(speed);
+      }
+    }else{
       hand.set(0);
-    }else if(yellowB && colorString == "Yellow" && match.confidence > 0.95){
-      hand.set(0);
-    }else if(greenB && colorString == "Green" && match.confidence > 0.92){
-      hand.set(0);
-    }else if(blueB && colorString == "Blue" && match.confidence > 0.90){
-      hand.set(0);
-      }else{
-      hand.set(speed);
     }
+    
   }
 
   public void MoveRotation(int speed, boolean button){
@@ -112,12 +116,9 @@ public class ControlPanel extends SubsystemBase {
 
   public void HandOut(boolean button){
     if(button){
-      handOutCount++;
-    }
-    if(handOutCount % 2 == 0){
-      handOpen.set(false);
-    }else{
       handOpen.set(true);
+    }else{
+      handOpen.set(false);
     }
     SmartDashboard.putNumber("handOpen", handOutCount);
     

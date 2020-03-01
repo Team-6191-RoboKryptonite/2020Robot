@@ -7,23 +7,26 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.subsystems.Bowel;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterWithJoystick extends CommandBase {
-
-  private final Shooter m_subsystem;
-  private final Joystick m_stick;
+public class AutoShoot extends CommandBase {
   /**
-   * Creates a new ShooterWithJoystick.
+   * Creates a new AutoShooter.
    */
-  public ShooterWithJoystick(Shooter subsystem, Joystick stick){
+
+  private final Shooter m_subsystem_s;
+  private final Bowel m_subsystem_b;
+  public final Timer m_timer = new Timer();
+
+  public AutoShoot(Shooter subsystem_s, Bowel subsystem_b) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_subsystem = subsystem;
-    m_stick = stick;
-    addRequirements(subsystem);
+    m_subsystem_s = subsystem_s;
+    m_subsystem_b = subsystem_b;
+    addRequirements(m_subsystem_s, m_subsystem_b);
+    m_timer.reset();
   }
 
   // Called when the command is initially scheduled.
@@ -34,10 +37,15 @@ public class ShooterWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.velocityClosedLoop(m_stick.getRawAxis(Constants.trigger_l) > 0.3, 1850, 2450);
-    //m_subsystem.showEncoderPos();
-    m_subsystem.velocityClosedLoop_read();
-    //m_subsystem.velocityClosedLoop(m_stick.getRawButton(Constants.button_B));
+    if(m_timer.get() < 5){
+      m_subsystem_s.velocityClosedLoop(true, 1800, 2200);
+    }else if(m_timer.get() < 8){
+      m_subsystem_b.BowelByJoystick(1, 1, 0.5, 0.5, true);
+    }else{
+      m_subsystem_s.setPercentaheOutput(0, 0, true);
+      m_subsystem_b.BowelByJoystick(1, 1, 0, 0, true);
+    }
+
   }
 
   // Called once the command ends or is interrupted.
