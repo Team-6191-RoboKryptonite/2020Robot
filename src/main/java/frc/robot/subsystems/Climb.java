@@ -23,9 +23,10 @@ public class Climb extends SubsystemBase {
    * Creates a new Lift.
    */
   public Climb() {
-    lift.setInverted(false);
-    lift2.setInverted(false);
+    lift.setInverted(true);
+    lift2.setInverted(true);
     lift2.follow(lift);
+    liftkeyCount = 0;
   }
 
   public void liftMove(boolean winch, double speed){

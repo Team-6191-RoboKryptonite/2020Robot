@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
      * kF: 1023 represents output value to Talon at 100%, 7200 represents Velocity units at 100% output
      * 0.025, 0.001, 20,
 	 * 	                                    			  kP   kI   kD   kF          Iz    PeakOut */
-  private final Gains kGains_Velocit = new Gains( 0.0002, 0.00002, 0, 1023.0/28800.0,  300,  1.00);
+  private final Gains kGains_Velocit = new Gains( 0.0001, 0.00002, 0, 1023.0/28800.0,  300,  1.00);
 
 
   /**

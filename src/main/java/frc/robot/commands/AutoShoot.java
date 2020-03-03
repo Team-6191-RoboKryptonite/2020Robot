@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Bowel;
 import frc.robot.subsystems.Shooter;
@@ -20,30 +21,36 @@ public class AutoShoot extends CommandBase {
   private final Shooter m_subsystem_s;
   private final Bowel m_subsystem_b;
   public final Timer m_timer = new Timer();
+  public boolean finish = false;
 
   public AutoShoot(Shooter subsystem_s, Bowel subsystem_b) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem_s = subsystem_s;
     m_subsystem_b = subsystem_b;
     addRequirements(m_subsystem_s, m_subsystem_b);
-    m_timer.reset();
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_timer.reset();
+    m_timer.start();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_timer.get() < 5){
+    SmartDashboard.putNumber("Timer", m_timer.get());
+    if(m_timer.get() < 3){
       m_subsystem_s.velocityClosedLoop(true, 1800, 2200);
-    }else if(m_timer.get() < 8){
+    }else if(m_timer.get() < 5){
       m_subsystem_b.BowelByJoystick(1, 1, 0.5, 0.5, true);
     }else{
       m_subsystem_s.setPercentaheOutput(0, 0, true);
       m_subsystem_b.BowelByJoystick(1, 1, 0, 0, true);
+      finish = true;
     }
 
   }
@@ -56,6 +63,6 @@ public class AutoShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finish;
   }
 }

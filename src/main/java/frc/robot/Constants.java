@@ -42,8 +42,8 @@ public final class Constants {
 
     //Sensor Channel
     public final static I2C.Port i2cPort = I2C.Port.kOnboard;
-    public final static int ultra_pingChannel = 1;
-    public final static int ultra_echoChannel = 2;
+    public final static int ultra_pingChannel = 5;
+    public final static int ultra_echoChannel = 6;
     //limitSwitchNumber From Low To High
     public final static int limitSwitch_1Channel = 8;
     public final static int limitSwitch_2Channel = 7;

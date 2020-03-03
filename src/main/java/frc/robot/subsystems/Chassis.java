@@ -65,6 +65,8 @@ public class Chassis extends SubsystemBase {
     wheel_l_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
     wheel_r_1.getSensorCollection().setQuadraturePosition(0, kTimeoutMs);
     wheel_l_1.getSensorCollection().setQuadraturePosition(0, kTimeoutMs);
+    wheel_r_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx,
+    kTimeoutMs);
     wheel_l_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx,
     kTimeoutMs);
     /* set deadband to super small 0.001 (0.1 %).
@@ -106,11 +108,11 @@ public class Chassis extends SubsystemBase {
     wheel_r_1.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
     wheel_r_1.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
     /* Set acceleration and vcruise velocity - see documentation */
-    wheel_l_1.configMotionCruiseVelocity(7500, kTimeoutMs);
-    wheel_l_1.configMotionAcceleration(3000, kTimeoutMs);
+    wheel_l_1.configMotionCruiseVelocity(2500, kTimeoutMs);
+    wheel_l_1.configMotionAcceleration(1000, kTimeoutMs);
 
-    wheel_r_1.configMotionCruiseVelocity(7500, kTimeoutMs);
-    wheel_r_1.configMotionAcceleration(3000, kTimeoutMs);
+    wheel_r_1.configMotionCruiseVelocity(2500, kTimeoutMs);
+    wheel_r_1.configMotionAcceleration(1000, kTimeoutMs);
 
     /* Zero the sensor once on robot boot up */
     wheel_l_1.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
@@ -236,6 +238,7 @@ public class Chassis extends SubsystemBase {
    */
   public void MotionMagicFoward(int distance){
     wheel_l_1.set(ControlMode.MotionMagic, distance * 4096);
+    wheel_r_1.set(ControlMode.MotionMagic, distance * 4096);
   }
 
   @Override

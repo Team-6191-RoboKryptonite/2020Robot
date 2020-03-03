@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Bowel extends SubsystemBase {
 
@@ -27,7 +28,8 @@ public class Bowel extends SubsystemBase {
   public Bowel() {
     bowel_d.setInverted(false);
     bowel_t.setInverted(true);
-    chassisIntake.setInverted(true);
+    chassisIntake.setInverted(false);
+    ultra.setAutomaticMode(true);
 
   }
 
@@ -66,6 +68,9 @@ public class Bowel extends SubsystemBase {
     }
   }
 
+  public void showUltrasonic(){
+    SmartDashboard.putNumber("ultra", ultra.getRangeMM());
+  }
 
   @Override
   public void periodic() {
