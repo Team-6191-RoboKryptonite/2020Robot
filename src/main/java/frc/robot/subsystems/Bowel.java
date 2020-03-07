@@ -37,11 +37,14 @@ public class Bowel extends SubsystemBase {
     if(move){
       if(down > 0.3 || down < -0.3){
         bowel_d.set(downSpeed * down);
-      }else if(top > 0.3 || top < -0.3){
+      }else{
+        bowel_d.set(0);
+      } 
+      
+      if(top > 0.3 || top < -0.3){
         bowel_t.set(topSpeed * top);
       }else{
         bowel_t.set(0);
-        bowel_d.set(0);
       }
     }else{
       bowel_t.set(0);
@@ -60,16 +63,25 @@ public class Bowel extends SubsystemBase {
     }
   }
   
-  public void ultrasonicControl(double distance, double speed){
-    if(ultra.getRangeMM() > distance){
-      bowel_t.set(speed);
+  public void ultrasonicControl( double down, double top, double topSpeed, double downSpeed, boolean move,  double distance){
+    if(move){
+      if(down > 0.3 || down < -0.3){
+        bowel_d.set(downSpeed * down);
+      }else if(top > 0.3 || top < -0.3){
+        bowel_t.set(topSpeed * top);
+      }else{
+        bowel_t.set(0);
+        bowel_d.set(0);
+      }
     }else{
-      bowel_t.stopMotor();
+      bowel_t.set(0);
+      bowel_d.set(0);
     }
   }
 
-  public void showUltrasonic(){
+  public void showUltrasonic(double distance){
     SmartDashboard.putNumber("ultra", ultra.getRangeMM());
+    SmartDashboard.putBoolean("topLimit", ultra.getRangeMM() > distance);
   }
 
   @Override

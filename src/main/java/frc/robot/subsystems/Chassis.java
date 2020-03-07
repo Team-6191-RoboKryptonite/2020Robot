@@ -46,7 +46,7 @@ public class Chassis extends SubsystemBase {
   private final  int kTimeoutMs = 30;
   private final int kIzone = 0;
   private final double kPeakOutput = 0;
-  private final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
+  private final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.35, 0, 0);
   
   /**
    * Creates a new Drive.
@@ -58,17 +58,14 @@ public class Chassis extends SubsystemBase {
     wheel_r_2.setInverted(false);
     wheel_l_2.follow(wheel_l_1);
     wheel_r_2.follow(wheel_r_1);
-    wheel_l_1.setSensorPhase(true);
-    wheel_r_1.setSensorPhase(false);
+    wheel_l_1.setSensorPhase(false);
+    wheel_r_1.setSensorPhase(true);
 
-    wheel_r_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	0, kTimeoutMs);
-    wheel_l_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, kTimeoutMs);
+    wheel_r_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	kPIDLoopIdx, kTimeoutMs);
+    wheel_l_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
     wheel_r_1.getSensorCollection().setQuadraturePosition(0, kTimeoutMs);
     wheel_l_1.getSensorCollection().setQuadraturePosition(0, kTimeoutMs);
-    wheel_r_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx,
-    kTimeoutMs);
-    wheel_l_1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx,
-    kTimeoutMs);
+
     /* set deadband to super small 0.001 (0.1 %).
       The default deadband is 0.04 (4 %) */
     wheel_l_1.configNeutralDeadband(0.001, kTimeoutMs);
@@ -108,11 +105,11 @@ public class Chassis extends SubsystemBase {
     wheel_r_1.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
     wheel_r_1.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
     /* Set acceleration and vcruise velocity - see documentation */
-    wheel_l_1.configMotionCruiseVelocity(2500, kTimeoutMs);
-    wheel_l_1.configMotionAcceleration(1000, kTimeoutMs);
+    wheel_l_1.configMotionCruiseVelocity(4200, kTimeoutMs);
+    wheel_l_1.configMotionAcceleration(2000, kTimeoutMs);
 
-    wheel_r_1.configMotionCruiseVelocity(2500, kTimeoutMs);
-    wheel_r_1.configMotionAcceleration(1000, kTimeoutMs);
+    wheel_r_1.configMotionCruiseVelocity(4200, kTimeoutMs);
+    wheel_r_1.configMotionAcceleration(2000, kTimeoutMs);
 
     /* Zero the sensor once on robot boot up */
     wheel_l_1.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
@@ -132,7 +129,7 @@ public class Chassis extends SubsystemBase {
    * @param mult the limit of speed.
    * @param turn the cargo and panel side inversed.
 	 */
-    public void driveChassis(double SpeedF, double SpeedB, double Rotation, double mult){
+  public void driveChassis(double SpeedF, double SpeedB, double Rotation, double mult){
 
 
     if(SpeedF > 0.3 && SpeedB == 0){
@@ -161,6 +158,15 @@ public class Chassis extends SubsystemBase {
     SmartDashboard.putNumber("Right Pos", ToDeg(rightPos));
     SmartDashboard.putNumber("Left Pos", ToDeg(leftPos));
     SmartDashboard.putNumber("Error", err);
+    double velocity_r = wheel_r_1.getSelectedSensorVelocity();
+    double velocity_l = wheel_l_1.getSelectedSensorVelocity();
+
+    /* Append more signals to print when in speed mode. */
+    
+    SmartDashboard.putNumber("RPM_r", velocity_r * 600 / 4096);
+    SmartDashboard.putNumber("RPM_l", velocity_l * 600 / 4096);
+    SmartDashboard.putNumber("RPM_rr", velocity_r);
+    SmartDashboard.putNumber("RPM_ll", velocity_l);
 
   }
   public void showGyro(){
@@ -206,7 +212,6 @@ public class Chassis extends SubsystemBase {
       ZeroEnc();
 
     }
-    SmartDashboard.putNumber("speed", SpeedF);
   }
 
   /**
@@ -236,9 +241,30 @@ public class Chassis extends SubsystemBase {
    * Drive foward by Motion Magic
    * @param distance Rotation of motor
    */
-  public void MotionMagicFoward(int distance){
+  public boolean MotionMagicFoward(int distance){
+    
+
     wheel_l_1.set(ControlMode.MotionMagic, distance * 4096);
     wheel_r_1.set(ControlMode.MotionMagic, distance * 4096);
+
+    if(wheel_l_1.getSelectedSensorPosition() <= distance * 4096){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public boolean EncCheck(int distance){
+    if(wheel_l_1.getSelectedSensorPosition() <= distance * 4096){
+      return true;
+    }else{
+      return false;
+    }
+  };
+
+
+  public void AutoTank(double speedL, double speedR){
+    m_chassis.tankDrive(speedL, speedR);
   }
 
   @Override

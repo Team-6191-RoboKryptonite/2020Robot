@@ -51,13 +51,14 @@ public class ControlPanel extends SubsystemBase {
     m_colorMatcher.addColorMatch(kGreenTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
     m_colorMatcher.addColorMatch(kYellowTarget); 
-    SmartDashboard.putNumber("Color(R1 Y2 G3 B4)", colorNow);
+    //SmartDashboard.putNumber("Color(R1 Y2 G3 B4)", colorNow);
     colorNow = 0;
     rotation = 0;
     colorChange = false;
-    SmartDashboard.putNumber("Color(R1 Y2 G3 B4)", colorNow);
+    //SmartDashboard.putNumber("Color(R1 Y2 G3 B4)", colorNow);
     SmartDashboard.putBoolean("Change", colorChange);
     SmartDashboard.putNumber("Rotation", rotation);
+
 
   }
 
@@ -69,10 +70,25 @@ public class ControlPanel extends SubsystemBase {
     }
   }
 
-  public void MovePosition(boolean redB, boolean yellowB, boolean greenB, boolean blueB, boolean button, double speed){
+  public void MovePosition(boolean redB, boolean yellowB, boolean greenB, boolean blueB, boolean button, boolean buttonR, double speed){
 
     
     //double colorint = SmartDashboard.getNumber("Color(R1 Y2 G3 B4)", colorNow);
+    Color detectedColor = m_colorSensor.getColor();
+    match = m_colorMatcher.matchClosestColor(detectedColor);
+
+    if (match.color == kBlueTarget) {
+      colorString = "Blue";
+    } else if (match.color == kRedTarget) {
+      colorString = "Red";
+    } else if (match.color == kGreenTarget) {
+      colorString = "Green";
+    } else if (match.color == kYellowTarget) {
+      colorString = "Yellow";
+    } else {
+      colorString = "Unknown";
+    }
+
     if(button){
       if(redB && colorString == "Red"){
         hand.set(0);
@@ -85,41 +101,50 @@ public class ControlPanel extends SubsystemBase {
         }else{
         hand.set(speed);
       }
-    }else{
-      hand.set(0);
-    }
-    
-  }
-
-  public void MoveRotation(int speed, boolean button){
-    if(button){
-      if(rotation >= 8){
+    }else if(buttonR){
+      if(rotation>=8){
         hand.stopMotor();
-      }else{
+      }
+      else{
         hand.set(speed);
       }
-    colorChange = colorString == "Blue" && match.confidence > 0.90;
-  
-      if(colorChange && colorString!="Blue"){
-        rotation++;
-        colorChange = false;
-      }else{
-        hand.stopMotor();
-        rotation = 0;
+
+      if(colorString == "Blue"){
+        if(match.confidence>0.90){
+          colorChange = true;
+        }
+      }
+
+      if(colorChange==true){
+        if(colorString!="Blue"){
+          rotation++;
+          colorChange = false;
+        }
       }
     SmartDashboard.putBoolean("Change", colorChange);
     SmartDashboard.putNumber("Rotation", rotation);
     }else{
       hand.set(0);
     }
+    // SmartDashboard.putNumber("Red", detectedColor.red);
+    // SmartDashboard.putNumber("Green", detectedColor.green);
+    // SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Confidence", match.confidence);
+    SmartDashboard.putString("Detected Color", colorString);
   }
+
 
   public void HandOut(boolean button){
     if(button){
-      handOpen.set(true);
-    }else{
-      handOpen.set(false);
+      handOutCount++;
     }
+    if(handOutCount% 2 == 0){
+      handOpen.set(false);
+      rotation = 0;
+    }else{
+      handOpen.set(true);
+    }
+
     SmartDashboard.putNumber("handOpen", handOutCount);
     
   }

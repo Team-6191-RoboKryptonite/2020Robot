@@ -39,7 +39,7 @@ public class BowelWithJoystick extends CommandBase {
     m_subsystem.moveChassisIntake(m_stick.getRawButton(Constants.button_B) && !m_stick.getRawButton(Constants.button_LB)
                                   ,m_stick.getRawButton(Constants.button_X) && !m_stick.getRawButton(Constants.button_LB)
                                   , 0.7);
-    m_subsystem.showUltrasonic();
+    m_subsystem.showUltrasonic(60);
   }
 
   // Called once the command ends or is interrupted.

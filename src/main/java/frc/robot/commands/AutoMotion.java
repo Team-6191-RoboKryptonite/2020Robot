@@ -15,6 +15,8 @@ public class AutoMotion extends CommandBase {
    * Creates a new AutoMotion.
    */
   private final Chassis m_subsystem;
+  private boolean finish; 
+
   public AutoMotion(Chassis subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
@@ -24,12 +26,26 @@ public class AutoMotion extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.ZeroEnc();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.MotionMagicFoward(5);
+  
+    m_subsystem.showEncoderPos();
+
+    if(m_subsystem.EncCheck(1)){
+      m_subsystem.AutoTank(0.5, -0.5);
+      finish = false;
+
+    }else if(m_subsystem.EncCheck(3)){
+      m_subsystem.AutoTank(0.5, 0.5);
+      finish = false;
+    }else{
+      finish = true;
+    }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +56,6 @@ public class AutoMotion extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finish;
   }
 }

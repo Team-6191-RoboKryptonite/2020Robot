@@ -5,22 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ExampleSubsystem extends SubsystemBase {
-  /**
-   * Creates a new ExampleSubsystem.
-   */
-  public ExampleSubsystem() {
+public class TriggerBinding extends Trigger {
+    Joystick m_joystick;
+    int m_axis;
 
-    
+    public TriggerBinding(Joystick joystick, int axis){
+        m_joystick = joystick;
+        m_axis = axis;
 
+    }
+    @Override
+    public boolean get() {
+      // This returns whether the trigger is active
+      return m_joystick.getRawAxis(m_axis) > 0.2;
+
+    }
   }
-
-  @Override
-  public void periodic() {
-
-  }
-}

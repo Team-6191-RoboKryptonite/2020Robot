@@ -35,6 +35,7 @@ public class DriveWithJoystick extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.ZeroEnc();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,8 +44,8 @@ public class DriveWithJoystick extends CommandBase {
     m_subsystem.driveChassis(m_joystick.getRawAxis(Constants.trigger_r), 
                              m_joystick.getRawAxis(Constants.trigger_l), 
                              m_joystick.getRawAxis(Constants.axis_l_x),
-                             0.7);
-    m_subsystem.showEncoderPos();
+                             0.8);
+    //m_subsystem.showEncoderPos();
     //m_subsystem.showGyro();
   }
 

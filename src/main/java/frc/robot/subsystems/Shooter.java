@@ -46,8 +46,11 @@ public class Shooter extends SubsystemBase {
      * kF: 1023 represents output value to Talon at 100%, 7200 represents Velocity units at 100% output
      * 0.025, 0.001, 20,
 	 * 	                                    			  kP   kI   kD   kF          Iz    PeakOut */
-  private final Gains kGains_Velocit = new Gains( 0.0001, 0.00002, 0, 1023.0/28800.0,  300,  1.00);
-
+  private final Gains kGains_Velocit = new Gains( 0.02, 0, 0, 1023.0/28800.0,  300,  1.00);
+  private boolean pos1 = false;
+  private boolean pos2 = false;
+  private boolean pos3 = false;
+  private boolean pos4 = false;
 
   /**
    * Creates a new Shooter.
@@ -61,7 +64,9 @@ public class Shooter extends SubsystemBase {
     shooter_d.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
                                             kPIDLoopIdx, 
                                             kTimeoutMs);
-
+    shooter_t.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
+                                            kPIDLoopIdx, 
+                                            kTimeoutMs);                                        
     /**
 		 * Phase sensor accordingly. 
      * Positive Sensor Reading should match Green (blinking) Leds on Talon
@@ -117,10 +122,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void velocityClosedLoop(boolean button, double speed_d, double speed_t){
+
     double targetVelocity_UnitsPer100ms_d = speed_d * 4096 / 600;
     double targetVelocity_UnitsPer100ms_t = speed_t * 4096 / 600;
     if(button){
-      /* 500 RPM in either direction */
       shooter_d.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms_d);
       shooter_t.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms_t);
     
@@ -131,32 +136,61 @@ public class Shooter extends SubsystemBase {
     }
   }
   public void velocityClosedLoop_read(){
-    double motorOutput = shooter_d.getMotorOutputPercent();
+    double motorOutput_d = shooter_d.getMotorOutputPercent();
+    double motorOutput_t = shooter_t.getMotorOutputPercent();
     double velocity_d = shooter_d.getSelectedSensorVelocity();
     double velocity_t = shooter_t.getSelectedSensorVelocity();
 
-      /* Append more signals to print when in speed mode. */
-      //SmartDashboard.putNumber("second", m_timer.get();)
-			SmartDashboard.putNumber("err:", shooter_d.getClosedLoopError(0));
-      SmartDashboard.putNumber("RPM_d", velocity_d * 600 / 4096);
-      SmartDashboard.putNumber("RPM_t", velocity_t * 600 / 4096);
-      SmartDashboard.putNumber("output Percent", motorOutput);
+    /* Append more signals to print when in speed mode. */
+    
+    SmartDashboard.putNumber("RPM_d", velocity_d * 600 / 4096);
+    SmartDashboard.putNumber("RPM_t", velocity_t * 600 / 4096);
+    SmartDashboard.putNumber("output Percent_d", motorOutput_d);
+    SmartDashboard.putNumber("output Percent_t", motorOutput_t);
 
   }
 
-  public void shooterChooser(boolean pos1, boolean pos2, boolean pos3, boolean pos4, double trigger){
-    
-    if(pos1){
-      velocityClosedLoop(trigger > 0.3,  1850, 2450);
-    }else if(pos2){
-      velocityClosedLoop(trigger > 0.3,  1850, 2450);
-    }else if (pos3){
-      velocityClosedLoop(trigger > 0.3,  1850, 2450);
-    }else if (pos4){
-      velocityClosedLoop(trigger > 0.3,  1850, 2450);
+  public void shooterChooser(boolean pos1B, boolean pos2B, boolean pos3B, boolean pos4B, boolean button){
+
+    if(pos1B){
+      pos1 = true;
+      pos2 = false;
+      pos3 = false;
+      pos4 = false;
+    }else if(pos2B){
+      pos1 = false;
+      pos2 = true;
+      pos3 = false;
+      pos4 = false;
+    }else if(pos3B){
+      pos1 = false;
+      pos2 = false;
+      pos3 = true;
+      pos4 = false;
+    }else if(pos4B){
+      pos1 = false;
+      pos2 = false;
+      pos3 = false;
+      pos4 = true;
     }else{
-      setPercentaheOutput(trigger * 0.8, trigger * 0.4, trigger > 0.3);
+
     }
+
+    if(pos1){
+      velocityClosedLoop(button,  1850, 2400);
+    }else if(pos2){
+      velocityClosedLoop(button,  1000, 1000);
+    }else if (pos3){
+      velocityClosedLoop(button,  2630, 1030);
+    }else if (pos4){
+      velocityClosedLoop(button,  850, 3550);
+    }else{
+      setPercentaheOutput(0, 0, false);
+    }
+    SmartDashboard.putBoolean("pos right", pos1);
+    SmartDashboard.putBoolean("pos left", pos2);
+    SmartDashboard.putBoolean("pos down", pos3);
+    SmartDashboard.putBoolean("pos up", pos4);
   }
 
   public void autoShoot(){

@@ -44,9 +44,11 @@ public class AutoShoot extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("Timer", m_timer.get());
     if(m_timer.get() < 3){
-      m_subsystem_s.velocityClosedLoop(true, 1800, 2200);
-    }else if(m_timer.get() < 5){
-      m_subsystem_b.BowelByJoystick(1, 1, 0.5, 0.5, true);
+      m_subsystem_s.velocityClosedLoop(true, 850, 3550);
+      finish = false;
+    }else if(m_timer.get() < 6){
+      m_subsystem_b.BowelByJoystick(-1, -1, 0.5, 0.5, true);
+      finish = false;
     }else{
       m_subsystem_s.setPercentaheOutput(0, 0, true);
       m_subsystem_b.BowelByJoystick(1, 1, 0, 0, true);

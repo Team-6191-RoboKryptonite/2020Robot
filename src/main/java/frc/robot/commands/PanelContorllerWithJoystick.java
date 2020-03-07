@@ -34,8 +34,15 @@ public class PanelContorllerWithJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.LazySusanWithJoystick(0.3, m_stick.getRawButton(Constants.button_LB));
-    m_subsystem.HandOut(m_stick.getRawButton(Constants. button_Y));
+    //m_subsystem.LazySusanWithJoystick(0.5, m_stick.getRawButton(9));
+    m_subsystem.MovePosition(m_stick.getRawButton(Constants.button_B)
+                             , m_stick.getRawButton(Constants.button_Y)
+                             , m_stick.getRawButton(Constants.button_A)
+                             , m_stick.getRawButton(Constants.button_X)
+                             , m_stick.getRawButton(Constants.button_LB)
+                             , m_stick.getRawButton(9)
+                             , 0.2);  
+    m_subsystem.HandOut(m_stick.getRawButtonPressed(10));
   }
 
   // Called once the command ends or is interrupted.
