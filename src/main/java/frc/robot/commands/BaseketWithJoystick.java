@@ -40,7 +40,7 @@ public class BaseketWithJoystick extends CommandBase {
     m_subsystem.intakeWithButton(m_stick.getRawButton(Constants.button_LB) && m_stick.getRawAxis(Constants.axis_l_y) < -0.3
                                  , m_stick.getRawButton(Constants.button_LB) && m_stick.getRawAxis(Constants.axis_l_y) > 0.3, 0.5);
     m_subsystem.ArmPosWithLimitSwitch(m_stick.getRawAxis(Constants.axis_r_y), m_stick.getRawButton(Constants.button_LB)
-                                 , m_stick.getRawButtonPressed(Constants.button_A), 0.3, 0.1, m_stick.getRawButton(Constants.button_X) && !m_stick.getRawButton(Constants.button_LB));
+                                 , m_stick.getRawButtonPressed(Constants.button_A), 0.3, 0.1, m_stick.getRawButton(Constants.button_Y) && !m_stick.getRawButton(Constants.button_LB));
     m_subsystem.showLimSwi();
   }
 

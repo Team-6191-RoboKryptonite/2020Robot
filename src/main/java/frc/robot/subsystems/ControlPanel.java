@@ -98,7 +98,9 @@ public class ControlPanel extends SubsystemBase {
         hand.set(0);
       }else if(blueB && colorString == "Blue" && match.confidence > 0.90){
         hand.set(0);
-        }else{
+      }else if(!greenB && !blueB && !redB && !yellowB){
+        hand.set(0);
+      }else{
         hand.set(speed);
       }
     }else if(buttonR){

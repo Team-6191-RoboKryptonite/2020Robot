@@ -71,6 +71,8 @@ public final class Constants {
     public final static int button_Y = 4;
     public final static int button_LB = 5;
     public final static int button_RB = 6;
+    public final static int button_Axis_l = 9;
+    public final static int button_Axis_r = 10;
     public final static int POV_up = 0;
     public final static int POV_upRight = 45;
     public final static int POV_Right = 90;

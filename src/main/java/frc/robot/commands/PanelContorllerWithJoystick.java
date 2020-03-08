@@ -40,9 +40,9 @@ public class PanelContorllerWithJoystick extends CommandBase {
                              , m_stick.getRawButton(Constants.button_A)
                              , m_stick.getRawButton(Constants.button_X)
                              , m_stick.getRawButton(Constants.button_LB)
-                             , m_stick.getRawButton(9)
+                             , m_stick.getRawButton(Constants.button_Axis_l)
                              , 0.2);  
-    m_subsystem.HandOut(m_stick.getRawButtonPressed(10));
+    m_subsystem.HandOut(m_stick.getRawButtonPressed(Constants.button_Axis_r));
   }
 
   // Called once the command ends or is interrupted.
