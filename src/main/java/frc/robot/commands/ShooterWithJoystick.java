@@ -55,8 +55,8 @@ public class ShooterWithJoystick extends CommandBase {
                                 , m_stick.getRawButton(Constants.button_X) && !m_stick.getRawButton(Constants.button_LB)
                                 , 0.7);
     m_subsystem.ultrasonicControl(m_stick.getRawAxis(Constants.axis_l_y), m_stick.getRawAxis(Constants.axis_r_y)
-                              , 0.5, 0.5, !m_stick.getRawButton(Constants.button_LB), 60);
-    m_subsystem.showUltrasonic(60);
+                              , 0.5, 0.5, !m_stick.getRawButton(Constants.button_LB), 70);
+    m_subsystem.showUltrasonic(70);
     //m_subsystem.velocityClosedLoop(m_stick.getRawButton(Constants.button_B));
   }
 
