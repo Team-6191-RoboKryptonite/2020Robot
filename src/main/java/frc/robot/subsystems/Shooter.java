@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.Constants;
 import frc.robot.Gains;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +21,11 @@ public class Shooter extends SubsystemBase {
 
   private final WPI_TalonSRX shooter_t = new WPI_TalonSRX(Constants.shooter_topPort);
   private final WPI_TalonSRX shooter_d = new WPI_TalonSRX(Constants.shooter_downPort);
+  private final WPI_TalonSRX bowel_t = new WPI_TalonSRX(Constants.bowel_tPort);
+  private final WPI_TalonSRX bowel_d = new WPI_TalonSRX(Constants.bowel_dPort);
+  private final WPI_TalonSRX chassisIntake = new WPI_TalonSRX(Constants.chassisIntakePort);
+  private final Ultrasonic ultra = new Ultrasonic(Constants.ultra_pingChannel, Constants.ultra_echoChannel);
+  
   
 
   /**
@@ -47,6 +53,7 @@ public class Shooter extends SubsystemBase {
      * 0.025, 0.001, 20,
 	 * 	                                    			  kP   kI   kD   kF          Iz    PeakOut */
   private final Gains kGains_Velocit = new Gains( 0.02, 0, 0, 1023.0/28800.0,  300,  1.00);
+  private boolean shooterOn = false;
   private boolean pos1 = false;
   private boolean pos2 = false;
   private boolean pos3 = false;
@@ -97,7 +104,12 @@ public class Shooter extends SubsystemBase {
     shooter_t.config_kF(kPIDLoopIdx, kGains_Velocit.kF, kTimeoutMs);
 		shooter_t.config_kP(kPIDLoopIdx, kGains_Velocit.kP, kTimeoutMs);
 		shooter_t.config_kI(kPIDLoopIdx, kGains_Velocit.kI, kTimeoutMs);
-		shooter_t.config_kD(kPIDLoopIdx, kGains_Velocit.kD, kTimeoutMs);
+    shooter_t.config_kD(kPIDLoopIdx, kGains_Velocit.kD, kTimeoutMs);
+    
+    bowel_d.setInverted(false);
+    bowel_t.setInverted(true);
+    chassisIntake.setInverted(false);
+    ultra.setAutomaticMode(true);
 
   }
 
@@ -128,10 +140,12 @@ public class Shooter extends SubsystemBase {
     if(button){
       shooter_d.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms_d);
       shooter_t.set(ControlMode.Velocity, targetVelocity_UnitsPer100ms_t);
+      shooterOn = true;
     
     }else{
       shooter_d.set(0);
       shooter_t.set(0);
+      shooterOn = true;
     
     }
   }
@@ -210,6 +224,68 @@ public class Shooter extends SubsystemBase {
 
 		return deg;
   }
+
+  public void BowelByJoystick(double down, double top, double topSpeed, double downSpeed, boolean move){
+    if(move){
+      if(down > 0.3 || down < -0.3){
+        bowel_d.set(downSpeed * down);
+      }else{
+        bowel_d.set(0);
+      } 
+      
+      if(top > 0.3 || top < -0.3){
+        bowel_t.set(topSpeed * top);
+      }else{
+        bowel_t.set(0);
+      }
+    }else{
+      bowel_t.set(0);
+      bowel_d.set(0);
+    }
+    
+  }
+
+  public void moveChassisIntake(boolean buttonIn, boolean buttonOut, double speed){
+    if(buttonIn){
+      chassisIntake.set(speed);
+    }else if(buttonOut){
+      chassisIntake.set(-speed);
+    }else{
+      chassisIntake.set(0);
+    }
+  }
+  
+  public void ultrasonicControl( double down, double top, double topSpeed, double downSpeed, boolean move,  double distance){
+    if(move){
+      if(down > 0.3 || down < -0.3){
+        bowel_d.set(downSpeed * down);
+      }else{
+        bowel_d.set(0);
+      } 
+      
+      if(top > 0.3){
+        if(ultra.getRangeMM() > distance){
+          bowel_t.set(topSpeed * top);
+        }else if(shooterOn){
+          bowel_t.set(topSpeed * top);
+        }else{
+          bowel_t.set(0);
+        }
+      }else if(top < -0.3){
+        bowel_t.set(topSpeed * top);
+      }else{
+        bowel_t.set(0);
+      }
+    }else{
+      bowel_t.set(0);
+    }
+  }
+
+  public void showUltrasonic(double distance){
+    SmartDashboard.putNumber("ultra", ultra.getRangeMM());
+    SmartDashboard.putBoolean("topLimit", ultra.getRangeMM() > distance);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

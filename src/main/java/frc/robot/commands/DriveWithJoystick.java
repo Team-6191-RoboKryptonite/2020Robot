@@ -45,6 +45,7 @@ public class DriveWithJoystick extends CommandBase {
                              m_joystick.getRawAxis(Constants.trigger_l), 
                              m_joystick.getRawAxis(Constants.axis_l_x),
                              0.8);
+    m_subsystem.VisonChassis(m_joystick.getRawButton(1));
     //m_subsystem.showEncoderPos();
     //m_subsystem.showGyro();
   }

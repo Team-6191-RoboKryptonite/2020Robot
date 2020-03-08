@@ -20,9 +20,9 @@ public class AutonomousGroup extends SequentialCommandGroup {
    * Creates a new AutonomousGroup.
    */
 
-  public AutonomousGroup(Shooter m_shooter, Chassis m_chassis, Bowel m_bowel) {
+  public AutonomousGroup(Shooter m_shooter, Chassis m_chassis) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutoShoot(m_shooter, m_bowel), new AutoMotion(m_chassis));
+    super(new AutoShoot(m_shooter), new AutoMotion(m_chassis));
   }
 }

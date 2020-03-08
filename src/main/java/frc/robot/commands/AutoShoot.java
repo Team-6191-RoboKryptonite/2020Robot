@@ -18,16 +18,14 @@ public class AutoShoot extends CommandBase {
    * Creates a new AutoShooter.
    */
 
-  private final Shooter m_subsystem_s;
-  private final Bowel m_subsystem_b;
+  private final Shooter m_subsystem;
   public final Timer m_timer = new Timer();
   public boolean finish = false;
 
-  public AutoShoot(Shooter subsystem_s, Bowel subsystem_b) {
+  public AutoShoot(Shooter subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_subsystem_s = subsystem_s;
-    m_subsystem_b = subsystem_b;
-    addRequirements(m_subsystem_s, m_subsystem_b);
+    m_subsystem = subsystem;
+    addRequirements(m_subsystem);
     
   }
 
@@ -44,14 +42,14 @@ public class AutoShoot extends CommandBase {
   public void execute() {
     SmartDashboard.putNumber("Timer", m_timer.get());
     if(m_timer.get() < 3){
-      m_subsystem_s.velocityClosedLoop(true, 850, 3550);
+      m_subsystem.velocityClosedLoop(true, 850, 3550);
       finish = false;
     }else if(m_timer.get() < 6){
-      m_subsystem_b.BowelByJoystick(-1, -1, 0.5, 0.5, true);
+      m_subsystem.BowelByJoystick(-1, -1, 0.5, 0.5, true);
       finish = false;
     }else{
-      m_subsystem_s.setPercentaheOutput(0, 0, true);
-      m_subsystem_b.BowelByJoystick(1, 1, 0, 0, true);
+      m_subsystem.setPercentaheOutput(0, 0, true);
+      m_subsystem.BowelByJoystick(1, 1, 0, 0, true);
       finish = true;
     }
 
