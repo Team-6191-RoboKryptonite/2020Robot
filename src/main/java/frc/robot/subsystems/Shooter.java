@@ -145,7 +145,7 @@ public class Shooter extends SubsystemBase {
     }else{
       shooter_d.set(0);
       shooter_t.set(0);
-      shooterOn = true;
+      shooterOn = false;
     
     }
   }
@@ -257,33 +257,30 @@ public class Shooter extends SubsystemBase {
   
   public void ultrasonicControl( double down, double top, double topSpeed, double downSpeed, boolean move,  double distance){
     if(move){
-      if(down > 0.3 || down < -0.3){
+      
+      if(ultra.getRangeMM() < distance && !shooterOn){
+        bowel_d.set(downSpeed * down);
+      }else if(down > 0.3 || down < -0.3){
         bowel_d.set(downSpeed * down);
       }else{
         bowel_d.set(0);
       } 
       
-      if(top > 0.3){
-        if(ultra.getRangeMM() > distance){
-          bowel_t.set(topSpeed * top);
-        }else if(shooterOn){
-          bowel_t.set(topSpeed * top);
-        }else{
-          bowel_t.set(0);
-        }
-      }else if(top < -0.3){
+      if(top > 0.3 || top < -0.3){
         bowel_t.set(topSpeed * top);
       }else{
         bowel_t.set(0);
       }
     }else{
       bowel_t.set(0);
+      bowel_d.set(0);
     }
+    
   }
 
   public void showUltrasonic(double distance){
     SmartDashboard.putNumber("ultra", ultra.getRangeMM());
-    SmartDashboard.putBoolean("topLimit", ultra.getRangeMM() > distance);
+    SmartDashboard.putBoolean("topLimit", ultra.getRangeMM() > distance || shooterOn);
   }
   
   @Override

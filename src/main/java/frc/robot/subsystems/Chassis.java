@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.Constants;
 import frc.robot.Gains;
-import frc.robot.NetworkTableRun;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveWithJoystick;
 
@@ -47,18 +46,10 @@ public class Chassis extends SubsystemBase {
   private final int kIzone = 0;
   private final double kPeakOutput = 0;
   private final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.35, 0, 0);
-  
-  private int rightPos = 0;
-  private int leftPos = 0;
+
   private double errA, errC;
 
-  private double uly = 0;
-  private double ury = 0;
-  private double centerX = 159.5;
-  private double distance = 0;
 
-  private double x = 0;
-  private double y = 0;
 
   
   /**
@@ -280,30 +271,7 @@ public class Chassis extends SubsystemBase {
     m_chassis.tankDrive(speedL, speedR);
   }
 
-  public void VisonChassis(boolean button){
-      //new NetworkTableRun().run();
-      uly = new NetworkTableRun().getTableNum("ul.y");
-      ury = new NetworkTableRun().getTableNum("ur.y");
-      centerX = new NetworkTableRun().getTableNum("centerX");
-      distance = new NetworkTableRun().getTableNum("distance(cm)");
-      
-      SmartDashboard.putNumber("uly", uly);
-      SmartDashboard.putNumber("ury", ury);
-      SmartDashboard.putNumber("centerX", centerX);
-      SmartDashboard.putNumber("distance(cm)", distance);
-      if(button){
-        errA = (uly - ury) * - 0.002;
-        errC = (centerX - 159.5) * 0.002;
-        // if(err > 1){
-        //   err = 1;
-        // }else if(err < -1){
-        //   err = -1;
-        // }
-        m_chassis.arcadeDrive(0.5 * errC, 0.5 * errA);
-      }else{
-      m_chassis.stopMotor();
-      }
-  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
