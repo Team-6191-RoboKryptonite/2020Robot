@@ -260,17 +260,15 @@ public class Shooter extends SubsystemBase {
       
       if(ultra.getRangeMM() < distance && !shooterOn){
         bowel_d.set(0.3);
-      }else if(down > 0.3 || down < -0.3){
+        bowel_t.set(0.3);
+      }else if(down > 0.3 || down < -0.3 || top > 0.3 || top < -0.3){
         bowel_d.set(downSpeed * down);
-      }else{
-        bowel_d.set(0);
-      } 
-      
-      if(top > 0.3 || top < -0.3){
         bowel_t.set(topSpeed * top);
       }else{
+        bowel_d.set(0);
         bowel_t.set(0);
-      }
+      } 
+
     }else{
       bowel_t.set(0);
       bowel_d.set(0);
