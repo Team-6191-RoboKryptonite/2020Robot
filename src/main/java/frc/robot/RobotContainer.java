@@ -37,20 +37,20 @@ public class RobotContainer {
   
 
   // The robot's subsystems and commands are defined here...
-  //private final ControlPanel m_controlPanel = new ControlPanel();
+  private final ControlPanel m_controlPanel = new ControlPanel();
   private final Chassis m_drive = new Chassis();
-  //private final Climb m_lift = new Climb();
+  private final Climb m_lift = new Climb();
   private final Shooter m_shooter = new Shooter();
-  //private final Baseket m_baseket = new Baseket();
+  private final Baseket m_baseket = new Baseket();
   private final Camera m_camera = new Camera();
   
 
   
   private final DriveWithJoystick m_driveWithJoystick = new DriveWithJoystick(m_drive, m_stick_Drive);
-  //private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift, m_controlPanel, m_stick_Control);
-  //private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel, m_stick_Control);
+  private final GeneratorSwitch m_generatorSwitch = new GeneratorSwitch(m_lift, m_controlPanel, m_stick_Control);
+  private final PanelContorllerWithJoystick m_panelContorllerWithJoystick = new PanelContorllerWithJoystick(m_controlPanel, m_stick_Control);
   private final ShooterWithJoystick m_shooterWithJoystick = new ShooterWithJoystick(m_shooter, m_stick_Control);
-  //private final BaseketWithJoystick m_baseketWithButton = new BaseketWithJoystick(m_baseket, m_stick_Control);
+  private final BaseketWithJoystick m_baseketWithButton = new BaseketWithJoystick(m_baseket, m_stick_Control);
   private final AutonomousGroup m_autonomousGroup = new AutonomousGroup(m_shooter, m_drive);
   private final CameraDisplay m_cameraDisplay = new CameraDisplay(m_camera);
 
@@ -59,10 +59,10 @@ public class RobotContainer {
     configureButtonBindings();
     m_drive.setDefaultCommand(m_driveWithJoystick);
     m_shooter.setDefaultCommand(m_shooterWithJoystick);
-    //m_controlPanel.setDefaultCommand(m_panelContorllerWithJoystick);
+    m_controlPanel.setDefaultCommand(m_panelContorllerWithJoystick);
     m_camera.setDefaultCommand(m_cameraDisplay);
-    //m_lift.setDefaultCommand(m_generatorSwitch);
-    //m_baseket.setDefaultCommand(m_baseketWithButton);
+    m_lift.setDefaultCommand(m_generatorSwitch);
+    m_baseket.setDefaultCommand(m_baseketWithButton);
   }
 
   /**
